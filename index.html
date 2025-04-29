@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>The Fash Lab</title>
+  <link rel="stylesheet" href="estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Registro -->
+  <div id="registro" class="section active">
+    <img src="logo.png" alt="Logo The Fash Lab" class="form-logo">
+    <h2>Regístrate</h2>
+    <p>Crea una cuenta para comenzar</p>
+    <input type="email" id="regEmail" placeholder="Correo electrónico">
+    <input type="password" id="regPass" placeholder="Contraseña">
+    <button onclick="registrarse()">Crear Cuenta</button>
+    <p>¿Ya tienes cuenta? <a onclick="mostrarLogin()">Inicia sesión</a></p>
+  </div>
+
+  <!-- Login -->
+  <div id="login" class="section">
+    <img src="logo.png" alt="Logo The Fash Lab" class="form-logo">
+    <h2>Iniciar Sesión</h2>
+    <p>Bienvenido de nuevo</p>
+    <input type="email" id="loginEmail" placeholder="Correo electrónico">
+    <input type="password" id="loginPass" placeholder="Contraseña">
+    <button onclick="iniciarSesion()">Entrar</button>
+    <p>¿No tienes cuenta? <a onclick="mostrarRegistro()">Regístrate</a></p>
+  </div>
+
+  <!-- Página Principal -->
+  <div id="principal" class="pagina-principal">
+    <header class="main-header">
+      <img src="logo.png" alt="Logo The Fash Lab" class="logo">
+      <h1 class="title">THE FASH LAB</h1>
+      <div class="search-cart">
+        <input type="text" placeholder="Buscar..." class="search-input">
+        <img src="carrito.png" alt="Carrito" class="cart-icon">
+      </div>
+    </header>
+    <main class="section-title">CATEGORÍAS DESTACADAS</h2>
+    <div class="product-card" onclick="mostrarCategoria('mujer')" style="cursor:pointer;">
+            <img src="mujer.jpg" alt="Dama" class="product-img">
+            <h3 class="product-name">DAMAS</h3>
+          
+          <div class="product-card" onclick="mostrarCategoria('caballero')" style="cursor:pointer;">
+            <img src="caballero.jpg" alt="Caballero" class="product-img">
+            <h3 class="product-name">CABALLERO</h3>
+          </div>          
+    </main>
+    
+    <div id="seccion-mujer" class="section" style="display:none;">
+      <h2>Sección Damas</h2>
+      <button onclick="volverInicio()">Volver a Inicio</button>
+      <p>Aquí van los productos para damas.</p>
+    </div>  
+          
+
+    <footer class="footer">
+      <p>&copy; 2025 THE FASH LAB - Todos los derechos reservados.</p>
+    </footer>
+  </div>
+
+  <script>
+    function mostrarRegistro() {
+      activar('registro');
+    }
+
+    function mostrarLogin() {
+      activar('login');
+    }
+
+    function mostrarPrincipal() {
+      activar('principal');
+    }
+
+
+    function activar(seccion) {
+      document.querySelectorAll('.section, .pagina-principal').forEach(div => {
+        div.classList.remove('active');
+      });
+      document.getElementById(seccion).classList.add('active');
+    }
+
+    function esCorreoValido(correo) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+    }
+
+    function limpiarCampos() {
+      document.querySelectorAll('input').forEach(input => input.value = '');
+    }
+
+    function registrarse() {
+      const email = document.getElementById('regEmail').value.trim();
+      const pass = document.getElementById('regPass').value.trim();
+      if (!email || !pass) {
+        alert("Por favor, completa todos los campos.");
+        return;
+      }
+      if (!esCorreoValido(email)) {
+        alert("Correo no válido.");
+        return;
+      }
+      localStorage.setItem('usuario', email);
+      localStorage.setItem('clave', pass);
+      alert("Registro exitoso. Ahora inicia sesión.");
+      limpiarCampos();
+      mostrarLogin();
+    }
+
+    function iniciarSesion() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+      const guardadoEmail = localStorage.getItem('usuario');
+      const guardadoPass = localStorage.getItem('clave');
+
+      if (email === guardadoEmail && pass === guardadoPass) {
+        limpiarCampos();
+        mostrarPrincipal();
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 300);
+      } else {
+        alert("Credenciales incorrectas.");
+      }
+    }
+
+    function cerrarSesion() {
+      limpiarCampos();
+      mostrarLogin();
+    }
+    </script>
+  
+    <script>
+    function mostrarCategoria(categoria) {
+      document.getElementById('principal').style.display = 'none';
+      document.getElementById('seccion-mujer').style.display = (categoria === 'mujer') ? 'block' : 'none';
+      document.getElementById('seccion-caballero').style.display = (categoria === 'caballero') ? 'block' : 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function volverInicio() {
+      document.getElementById('principal').style.display = 'block';
+      document.getElementById('seccion-mujer').style.display = 'none';
+      document.getElementById('seccion-caballero').style.display = 'none';
+    }
+    </script>
+  
+</body>
+</html>
